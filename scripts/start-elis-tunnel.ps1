@@ -1,5 +1,3 @@
-$ErrorActionPreference = "Stop"
-
 # Script: start-elis-tunnel.ps1
 # Objetivo: garantir que o Ollama (ELIS) está respondendo localmente e, em seguida,
 # abrir um Cloudflare Tunnel (trycloudflare) para expor a ELIS na internet.
@@ -10,9 +8,10 @@ $ErrorActionPreference = "Stop"
 # Observação: o tunnel fica rodando no terminal. Para parar: CTRL+C.
 
 param(
-  [string]$OllamaBaseUrl = "http://localhost:11434",
-  [string]$CloudflaredArgs = "--url http://localhost:11434"
+  [string]$OllamaBaseUrl = "http://localhost:11434"
 )
+
+$ErrorActionPreference = "Stop"
 
 function Resolve-CommandPath {
   param(
@@ -59,4 +58,4 @@ if (-not (Test-Ollama -BaseUrl $OllamaBaseUrl)) {
 Write-Host "ELIS (Ollama) OK. Abrindo Cloudflare Tunnel..."
 
 # Rodar em foreground pra você ver a URL trycloudflare e manter o tunnel aberto.
-& $cloudflaredExe tunnel $CloudflaredArgs
+& $cloudflaredExe tunnel --url $OllamaBaseUrl
